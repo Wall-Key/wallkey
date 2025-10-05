@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WallKey - Ne perdez plus vos clés</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 15px 50px;
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #b6d8f2, #b4f2e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #b6d8f2, #b4f2e5);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background avec logos */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at center, rgba(182, 216, 242, 0.03) 0%, rgba(10, 10, 10, 1) 80%);
+            z-index: 1;
+        }
+
+        .logo-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            opacity: 0.15;
+            overflow: hidden;
+        }
+
+        .floating-logo {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            animation: floatLogo 20s infinite ease-in-out;
+            opacity: 0.15;
+        }
+
+        .floating-logo svg {
+            width: 100%;
+            height: 100%;
+            stroke: #b6d8f2;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-40px) rotate(15deg);
+            }
+        }
+
+        .floating-logo:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; animation-duration: 15s; width: 50px; height: 50px; }
+        .floating-logo:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; animation-duration: 18s; width: 70px; height: 70px; }
+        .floating-logo:nth-child(3) { top: 60%; left: 5%; animation-delay: 4s; animation-duration: 20s; width: 55px; height: 55px; }
+        .floating-logo:nth-child(4) { top: 70%; right: 10%; animation-delay: 1s; animation-duration: 16s; width: 65px; height: 65px; }
+        .floating-logo:nth-child(5) { top: 30%; left: 25%; animation-delay: 3s; animation-duration: 19s; width: 60px; height: 60px; }
+        .floating-logo:nth-child(6) { top: 50%; right: 25%; animation-delay: 5s; animation-duration: 17s; width: 75px; height: 75px; }
+        .floating-logo:nth-child(7) { top: 15%; left: 50%; animation-delay: 2.5s; animation-duration: 21s; width: 58px; height: 58px; }
+        .floating-logo:nth-child(8) { top: 80%; left: 30%; animation-delay: 4.5s; animation-duration: 18s; width: 62px; height: 62px; }
+        .floating-logo:nth-child(9) { top: 40%; right: 5%; animation-delay: 1.5s; animation-duration: 22s; width: 68px; height: 68px; }
+        .floating-logo:nth-child(10) { top: 25%; left: 70%; animation-delay: 3.5s; animation-duration: 19s; width: 52px; height: 52px; }
+        .floating-logo:nth-child(11) { top: 65%; right: 35%; animation-delay: 0.5s; animation-duration: 20s; width: 72px; height: 72px; }
+        .floating-logo:nth-child(12) { top: 85%; right: 50%; animation-delay: 2.8s; animation-duration: 16s; width: 56px; height: 56px; }
+        .floating-logo:nth-child(13) { top: 5%; left: 35%; animation-delay: 1.8s; animation-duration: 17s; width: 64px; height: 64px; }
+        .floating-logo:nth-child(14) { top: 45%; left: 15%; animation-delay: 3.2s; animation-duration: 19s; width: 58px; height: 58px; }
+        .floating-logo:nth-child(15) { top: 75%; right: 20%; animation-delay: 4.8s; animation-duration: 21s; width: 66px; height: 66px; }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 8vw, 90px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            line-height: 1.1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #b6d8f2, #b4f2e5, #f4cfdf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(18px, 3vw, 24px);
+            color: #aaa;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #b6d8f2, #b4f2e5);
+            color: #0a0a0a;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #b4f2e5, #f4cfdf);
+            transition: left 0.4s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        .cta-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 50px;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(40px, 6vw, 70px);
+            font-weight: 700;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 50px 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(182, 216, 242, 0.1), rgba(180, 242, 229, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(182, 216, 242, 0.5);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #b6d8f2, #b4f2e5);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 40px;
+            transition: all 0.5s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotateY(360deg);
+        }
+
+        .feature-card h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #aaa;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Exploded View Section */
+        .exploded-view {
+            padding: 100px 50px;
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .exploded-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .exploded-text {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .exploded-text h2 {
+            font-size: clamp(35px, 5vw, 60px);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .exploded-text p {
+            font-size: 18px;
+            color: #aaa;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .exploded-container {
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .component {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .component-inner {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(182, 216, 242, 0.2), rgba(180, 242, 229, 0.2));
+            border: 2px solid rgba(182, 216, 242, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(182, 216, 242, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .component:hover .component-inner {
+            transform: scale(1.1);
+            box-shadow: 0 15px 60px rgba(182, 216, 242, 0.5);
+        }
+
+        .component-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.3s;
+            pointer-events: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+            background: rgba(10, 10, 10, 0.8);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .component.exploded .component-label {
+            opacity: 1;
+        }
+
+        /* Positions initiales (assemblé) */
+        .component:nth-child(1) { transform: translate(0, 0); }
+        .component:nth-child(2) { transform: translate(0, 0); }
+        .component:nth-child(3) { transform: translate(0, 0); }
+        .component:nth-child(4) { transform: translate(0, 0); }
+        .component:nth-child(5) { transform: translate(0, 0); }
+
+        /* Positions éclatées */
+        .component.exploded:nth-child(1) { 
+            transform: translate(-250px, -200px) rotateY(-15deg) scale(1);
+        }
+        .component.exploded:nth-child(2) { 
+            transform: translate(250px, -200px) rotateY(15deg) scale(1);
+        }
+        .component.exploded:nth-child(3) { 
+            transform: translate(0, -100px) scale(1.1);
+        }
+        .component.exploded:nth-child(4) { 
+            transform: translate(-250px, 200px) rotateY(-15deg) scale(1);
+        }
+        .component.exploded:nth-child(5) { 
+            transform: translate(250px, 200px) rotateY(15deg) scale(1);
+        }
+
+        /* Icônes pour chaque composant */
+        .component:nth-child(1) .component-inner::before { content: '🧲'; }
+        .component:nth-child(2) .component-inner::before { content: '💡'; }
+        .component:nth-child(3) .component-inner::before { content: '🔌'; }
+        .component:nth-child(4) .component-inner::before { content: '🔋'; }
+        .component:nth-child(5) .component-inner::before { content: '⚙️'; }
+
+        /* Product Showcase */
+        .showcase {
+            padding: 100px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .showcase-text {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1s ease;
+        }
+
+        .showcase-text.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .showcase-text h2 {
+            font-size: clamp(35px, 5vw, 60px);
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .showcase-text p {
+            font-size: 18px;
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .showcase-visual {
+            position: relative;
+            height: 500px;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 1s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .showcase-visual.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .floating-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: float 6s ease-in-out infinite;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .floating-card:nth-child(1) {
+            align-self: flex-start;
+            animation-delay: 0s;
+        }
+
+        .floating-card:nth-child(2) {
+            align-self: flex-end;
+            animation-delay: 2s;
+        }
+
+        .floating-card:nth-child(3) {
+            align-self: center;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 50px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(182, 216, 242, 0.1), rgba(180, 242, 229, 0.1));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(182, 216, 242, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .cta-section h2 {
+            font-size: clamp(35px, 6vw, 70px);
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: #aaa;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        footer p:last-child {
+            margin-bottom: 0;
+        }
+
+        footer a {
+            color: #b6d8f2;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #b4f2e5;
+            transition: color 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .showcase-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .showcase-visual {
+                height: 400px;
+            }
+
+            .exploded-view {
+                padding: 80px 20px;
+            }
+
+            .exploded-container {
+                height: 800px;
+            }
+
+            .component {
+                width: 100px;
+                height: 100px;
+            }
+
+            .component.exploded:nth-child(1) { 
+                transform: translate(-120px, -250px) scale(0.9);
+            }
+            .component.exploded:nth-child(2) { 
+                transform: translate(120px, -250px) scale(0.9);
+            }
+            .component.exploded:nth-child(3) { 
+                transform: translate(0, -80px) scale(1);
+            }
+            .component.exploded:nth-child(4) { 
+                transform: translate(-120px, 250px) scale(0.9);
+            }
+            .component.exploded:nth-child(5) { 
+                transform: translate(120px, 250px) scale(0.9);
+            }
+
+            .features, .showcase, .cta-section {
+                padding: 100px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="logo">WallKey</div>
+        <ul class="nav-links">
+            <li><a href="#features">Fonctionnalités</a></li>
+            <li><a href="#exploded">Technologie</a></li>
+            <li><a href="#product">Produit</a></li>
+            <li><a href="#cta">Commander</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="logo-background">
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+            <div class="floating-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="25"/>
+                    <circle cx="50" cy="35" r="15"/>
+                    <circle cx="50" cy="35" r="5"/>
+                    <path d="M 42 58 Q 45 62, 48 58"/>
+                    <path d="M 52 58 Q 55 62, 58 58"/>
+                    <rect x="45" y="65" width="10" height="8" rx="2"/>
+                    <rect x="47" y="73" width="6" height="3"/>
+                    <rect x="48" y="76" width="4" height="2"/>
+                </svg>
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1>Ne perdez plus <span class="gradient-text">vos clés</span></h1>
+            <p>Le support de clés intelligent qui révolutionne votre quotidien</p>
+            <a href="#cta" class="cta-button"><span>Découvrir WallKey</span></a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title">Une technologie <span class="gradient-text">innovante</span></h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Design Minimaliste</h3>
+                <p>Un design épuré et élégant qui s'intègre parfaitement à votre intérieur. WallKey transforme un simple porte-clés en objet de décoration high-tech.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3>Alerte Parents</h3>
+                <p>Recevez une notification instantanée sur votre téléphone dès que votre enfant rentre à la maison. Soyez rassuré en temps réel, où que vous soyez.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>LED Contrôlable</h3>
+                <p>Personnalisez l'éclairage LED via notre application mobile intuitive. Choisissez la couleur, l'intensité et créez des ambiances uniques.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="exploded-view" id="exploded">
+        <div class="exploded-content">
+            <div class="exploded-text">
+                <h2>Technologie <span class="gradient-text">révolutionnaire</span></h2>
+                <p>Découvrez l'ingénierie derrière WallKey. Chaque composant a été pensé pour allier design et performance.</p>
+            </div>
+            <div class="exploded-container">
+                <div class="component">
+                    <div class="component-inner"></div>
+                    <span class="component-label">Capteur Magnétique</span>
+                </div>
+                <div class="component">
+                    <div class="component-inner"></div>
+                    <span class="component-label">Module LED RGB</span>
+                </div>
+                <div class="component">
+                    <div class="component-inner"></div>
+                    <span class="component-label">Processeur IoT</span>
+                </div>
+                <div class="component">
+                    <div class="component-inner"></div>
+                    <span class="component-label">Batterie Longue Durée</span>
+                </div>
+                <div class="component">
+                    <div class="component-inner"></div>
+                    <span class="component-label">Base en Aluminium</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase" id="product">
+        <div class="showcase-content">
+            <div class="showcase-text">
+                <h2>Bien plus qu'un simple <span class="gradient-text">porte-clés</span></h2>
+                <p>WallKey combine design minimaliste et technologie intelligente pour créer l'accessoire connecté dont vous avez toujours rêvé.</p>
+                <p>Grâce à ses capteurs intégrés et son application mobile dédiée, WallKey vous offre tranquillité d'esprit et contrôle total sur votre entrée.</p>
+                <p>Installation simple en quelques minutes, compatibilité universelle, et autonomie longue durée.</p>
+            </div>
+            <div class="showcase-visual">
+                <div class="floating-card">
+                    <h4 style="margin-bottom: 10px;">📱 Application Mobile</h4>
+                    <p style="color: #aaa; font-size: 14px;">Contrôle total</p>
+                </div>
+                <div class="floating-card">
+                    <h4 style="margin-bottom: 10px;">🔋 Autonomie</h4>
+                    <p style="color: #aaa; font-size: 14px;">6 mois</p>
+                </div>
+                <div class="floating-card">
+                    <h4 style="margin-bottom: 10px;">⚡ Installation</h4>
+                    <p style="color: #aaa; font-size: 14px;">5 minutes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <h2>Prêt à transformer <span class="gradient-text">votre entrée</span> ?</h2>
+        <p>Rejoignez des milliers de familles qui ont choisi WallKey</p>
+        <a href="#" class="cta-button"><span>Commander maintenant</span></a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 WallKey. Tous droits réservés.</p>
+        <p>Pour toute information contactez : <a href="mailto:wall.key0016@outlook.fr">wall.key0016@outlook.fr</a></p>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title, .feature-card, .showcase-text, .showcase-visual').forEach(function(el) {
+            observer.observe(el);
+        });
+
+        // Exploded View Animation
+        const explodedSection = document.querySelector('.exploded-view');
+        const components = document.querySelectorAll('.component');
+
+        const explodedObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    // Délai progressif pour chaque composant
+                    components.forEach(function(component, index) {
+                        setTimeout(function() {
+                            component.classList.add('exploded');
+                        }, index * 150);
+                    });
+                } else {
+                    // Réassembler quand on sort de la vue
+                    components.forEach(function(component) {
+                        component.classList.remove('exploded');
+                    });
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        if (explodedSection) {
+            explodedObserver.observe(explodedSection);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
